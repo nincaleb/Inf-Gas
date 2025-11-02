@@ -5,6 +5,7 @@ on:
     tags:
       - "v*"
 
+# Needed so the workflow can create/update releases
 permissions:
   contents: write
 
@@ -26,9 +27,11 @@ jobs:
           pip install --upgrade pip
           pip install pyinstaller mitmproxy
 
-      - name: Build static-name EXE
+      - name: Build EXE
         run: |
-          pyinstaller --onefile --console --clean --name InfGas_streamlined InfGas_streamlined.py
+          pyinstaller --onefile --console --clean InfGas_streamlined.py
+
+      # ✅ Removed rename step entirely
 
       - name: Package files
         shell: pwsh
