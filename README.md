@@ -134,6 +134,4 @@ If `http://mitm.it` does not load, double-check the phone proxy and that mitmweb
 ---
 
 ## License & contact
-This project is meant for private testing and debugging. Add a LICENSE if you will share the repository publicly (MIT is common).
-
-If you want this README saved into your project folder, say **"save it"** and I will write it to `/mnt/data/README.md` for you.
+This project is distributed under the **MIT License** (LICENSE file included in this repository). For questions or support, contact me on Discord: **nincaleb**.
