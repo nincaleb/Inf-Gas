@@ -5,15 +5,20 @@ on:
     tags:
       - "v*"
 
+# Needed so the workflow can create/update releases
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
       - name: Checkout repository
+      # v4 is current as of 2025
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -27,20 +32,27 @@ jobs:
         run: |
           pyinstaller --onefile --console --clean InfGas_streamlined.py
 
+      - name: Rename EXE to include tag
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          Rename-Item "dist\InfGas_streamlined.exe" "InfGas_$tag.exe"
+
       - name: Package files
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path release | Out-Null
-          Copy-Item dist\InfGas_streamlined.exe release\
-          Copy-Item extract_tokens.py release\
-          Copy-Item run_all.bat release\
-          Copy-Item run_infgas.bat release\
-          Copy-Item README.md release\
-          Compress-Archive -Path release\* -DestinationPath InfGas_release.zip
+          Copy-Item "dist\InfGas_${{ github.ref_name }}.exe" release\
+          Copy-Item "extract_tokens.py" release\
+          Copy-Item "run_all.bat" release\
+          Copy-Item "run_infgas.bat" release\
+          Copy-Item "README.md" release\
+          Compress-Archive -Path release\* -DestinationPath "InfGas_release.zip"
 
-      - name: Create GitHub Release
+      - name: Create / Update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: InfGas_release.zip
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
