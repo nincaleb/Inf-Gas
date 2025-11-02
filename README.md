@@ -105,6 +105,9 @@ If `http://mitm.it` does not load, double-check the phone proxy and that mitmweb
 ### Everyday use (one click)
 - Double‑click **`run_infgas.bat`**. If `credentials.json` exists, InfGas can load saved credentials and start the loop without additional setup.
 
+**Downloads:** The packaged ZIP (including the executable and launchers) is available on this repository's **Releases** page. Download the latest release (look for `InfGas_final_package.zip`) and extract it to a folder before running the launchers.
+
+
 ### Manual entry (no mitmproxy)
 1. Double‑click `run_infgas.bat`.  
 2. Choose **"Enter credentials manually"** and paste the USERID and token when prompted.  
@@ -132,6 +135,8 @@ If `http://mitm.it` does not load, double-check the phone proxy and that mitmweb
 - **InfGas doesn’t detect credentials:** open mitmweb UI (launcher opens it) and inspect captured requests. If token is stored in a nonstandard header or body field, the addon can be adjusted.
 
 ---
+
+
 
 ## License & contact
 This project is distributed under the **MIT License** (LICENSE file included in this repository). For questions or support, contact me on Discord: **nincaleb**.
