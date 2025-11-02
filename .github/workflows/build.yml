@@ -36,7 +36,7 @@ jobs:
         shell: pwsh
         run: |
           $tag = "${{ github.ref_name }}"
-          Rename-Item "dist\InfGas_streamlined.exe" "InfGas_$tag.exe"
+          Rename-Item "dist\InfGas_streamlined.exe" "InfGas_streamlined.exe"
 
       - name: Package files
         shell: pwsh
