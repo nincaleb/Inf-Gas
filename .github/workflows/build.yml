@@ -1,0 +1,46 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pyinstaller mitmproxy
+
+      - name: Build EXE
+        run: |
+          pyinstaller --onefile --console --clean InfGas_streamlined.py
+
+      - name: Package files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release | Out-Null
+          Copy-Item dist\InfGas_streamlined.exe release\
+          Copy-Item extract_tokens.py release\
+          Copy-Item run_all.bat release\
+          Copy-Item run_infgas.bat release\
+          Copy-Item README.md release\
+          Compress-Archive -Path release\* -DestinationPath InfGas_release.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: InfGas_release.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
