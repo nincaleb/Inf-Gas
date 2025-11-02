@@ -5,7 +5,6 @@ on:
     tags:
       - "v*"
 
-# Needed so the workflow can create/update releases
 permissions:
   contents: write
 
@@ -15,7 +14,6 @@ jobs:
 
     steps:
       - name: Checkout repository
-      # v4 is current as of 2025
         uses: actions/checkout@v4
 
       - name: Set up Python 3.12
@@ -28,21 +26,15 @@ jobs:
           pip install --upgrade pip
           pip install pyinstaller mitmproxy
 
-      - name: Build EXE
+      - name: Build static-name EXE
         run: |
-          pyinstaller --onefile --console --clean InfGas_streamlined.py
-
-      - name: Rename EXE to include tag
-        shell: pwsh
-        run: |
-          $tag = "${{ github.ref_name }}"
-          Rename-Item "dist\InfGas_streamlined.exe" "InfGas_streamlined.exe"
+          pyinstaller --onefile --console --clean --name InfGas_streamlined InfGas_streamlined.py
 
       - name: Package files
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path release | Out-Null
-          Copy-Item "dist\InfGas_${{ github.ref_name }}.exe" release\
+          Copy-Item "dist\InfGas_streamlined.exe" release\
           Copy-Item "extract_tokens.py" release\
           Copy-Item "run_all.bat" release\
           Copy-Item "run_infgas.bat" release\
